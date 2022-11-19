@@ -1,0 +1,39 @@
+---
+title: "Gamification BDA"
+execute: 
+  echo: false
+---
+
+## Introduction
+
+TBA
+
+- **G**: Gamification approach was used; value = {true, false}
+- **EJ**: Experience in Java; value = {"<1 year", "1-3 years", ">3 years"}
+- **EW**: Experience in web development; value = {"<1 year", "1-3 years", ">3 years"}
+- **ET**: Experience in software testing; value = {"<1 year", "1-3 years", ">3 years"}
+- **W**: Inspected widgets
+- **B**: Identified bugs
+- **COV**: Test coverage
+- **EF**: Effectiveness of exploratory testing
+- **AW**: Average number of widgets on a page
+
+```{r}
+suppressPackageStartupMessages(library(dagitty))
+suppressPackageStartupMessages(library(rethinking))
+dag <- dagitty("dag {
+G -> W
+G -> B
+EJ -> W
+EJ -> B
+EW -> W
+EW -> B
+ET -> W
+ET -> B
+W -> COV
+B -> COV
+AW -> COV
+COV -> EF
+}")
+drawdag(dag)
+```
