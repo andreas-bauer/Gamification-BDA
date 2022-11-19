@@ -1,2 +1,5 @@
 /.quarto/
 .Rproj.user
+.Rhistory
+.Rapp.history
+.RData
