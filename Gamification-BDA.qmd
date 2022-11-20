@@ -37,3 +37,18 @@ COV -> EF
 }")
 drawdag(dag)
 ```
+
+Assumptions:
+
+- G -\> W: Using Gamification encourage testers to inspect more widgets
+- G -\> B: Using Gamification encourage testers to identify more bugs
+- EJ -\> W: Experience in the used programming language will improves the inspection rate of widgets
+- EJ -\> B: Experience in the used programming will identify more bugs
+- EW -\> W: Experience in the technology of the SUT improves the inspection rate of widgets
+- EW -\> B: Experience in the technology of the SUT improves the identification of bugs
+- ET -\> W: Experience in software testing improves the inspection rate of widgets
+- ET -\> B: Experience in software testing improves the identification of bugs
+- W -\> COV: More inspected widgets increase the test coverage
+- B -\> COV: More identified bugs increase the test coverage
+- AW -\> COV: Average number of widgets on a page influence the test coverage of exploratory tests
+- COV -\> EF: More test coverage improves the effectiveness of exploratory tests
