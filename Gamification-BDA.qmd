@@ -52,3 +52,8 @@ Assumptions:
 - B -\> COV: More identified bugs increase the test coverage
 - AW -\> COV: Average number of widgets on a page influence the test coverage of exploratory tests
 - COV -\> EF: More test coverage improves the effectiveness of exploratory tests
+
+```{r}
+equivalentDAGs(dag)
+impliedConditionalIndependencies(dag)
+```

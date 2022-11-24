@@ -108,6 +108,79 @@ ul.task-list li input[type="checkbox"] {
 <p><img src="Gamification-BDA_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>Assumptions:</p>
+<ul>
+<li>G -&gt; W: Using Gamification encourage testers to inspect more widgets</li>
+<li>G -&gt; B: Using Gamification encourage testers to identify more bugs</li>
+<li>EJ -&gt; W: Experience in the used programming language will improves the inspection rate of widgets</li>
+<li>EJ -&gt; B: Experience in the used programming will identify more bugs</li>
+<li>EW -&gt; W: Experience in the technology of the SUT improves the inspection rate of widgets</li>
+<li>EW -&gt; B: Experience in the technology of the SUT improves the identification of bugs</li>
+<li>ET -&gt; W: Experience in software testing improves the inspection rate of widgets</li>
+<li>ET -&gt; B: Experience in software testing improves the identification of bugs</li>
+<li>W -&gt; COV: More inspected widgets increase the test coverage</li>
+<li>B -&gt; COV: More identified bugs increase the test coverage</li>
+<li>AW -&gt; COV: Average number of widgets on a page influence the test coverage of exploratory tests</li>
+<li>COV -&gt; EF: More test coverage improves the effectiveness of exploratory tests</li>
+</ul>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+dag {
+AW
+B
+COV
+EF
+EJ
+ET
+EW
+G
+W
+AW -&gt; COV
+B -&gt; COV
+COV -&gt; EF
+EJ -&gt; B
+EJ -&gt; W
+ET -&gt; B
+ET -&gt; W
+EW -&gt; B
+EW -&gt; W
+G -&gt; B
+G -&gt; W
+W -&gt; COV
+}</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>AW _||_ B
+AW _||_ EF | COV
+AW _||_ EJ
+AW _||_ ET
+AW _||_ EW
+AW _||_ G
+AW _||_ W
+B _||_ EF | COV
+B _||_ W | EJ, ET, EW, G
+COV _||_ EJ | B, W
+COV _||_ ET | B, W
+COV _||_ EW | B, W
+COV _||_ G | B, W
+EF _||_ EJ | B, W
+EF _||_ EJ | COV
+EF _||_ ET | B, W
+EF _||_ ET | COV
+EF _||_ EW | B, W
+EF _||_ EW | COV
+EF _||_ G | B, W
+EF _||_ G | COV
+EF _||_ W | COV
+EJ _||_ ET
+EJ _||_ EW
+EJ _||_ G
+ET _||_ EW
+ET _||_ G
+EW _||_ G</code></pre>
+</div>
+</div>
 
 
 </section>
