@@ -6,7 +6,18 @@ execute:
 
 ## Introduction
 
-TBA
+Software testing is an integral part of software development.
+Developers incorporate tests from low-level unit tests to high-level system tests and GUI-based tests.
+GUI-based tests can verify a system's behavior through interactions with its GUI the same way a user would.
+One approach to increase the engagement and motivation of people performing a task is Gamification, where elements originated in games are applied in a non-gaming context.
+In the context of exploratory GUI-based testing, Gamification could improve testers' engagement and therefore improve the outcome of test activities.
+
+Coppola et al. [1] conducted an experiment with 144 participants to investigate how Gamification would impact the effectiveness and efficiency of exploratory GUI testing. 
+
+In this project, I perform a (re-)analysis of the impacts of Gamification for exploratory GUI testing using Bayesian Data Analysis (BDA).
+Input for this analysis is the [replication package](https://figshare.com/projects/GamificationReplicationPackage/127202) from the experiment [1].
+
+## Directed Acyclic Graph (DAG)
 
 - **G**: Gamification approach was used; value = {true, false}
 - **EJ**: Experience in Java; value = {"<1 year", "1-3 years", ">3 years"}
@@ -42,7 +53,7 @@ Assumptions:
 
 - G -\> W: Using Gamification encourage testers to inspect more widgets
 - G -\> B: Using Gamification encourage testers to identify more bugs
-- EJ -\> W: Experience in the used programming language will improves the inspection rate of widgets
+- EJ -\> W: Experience in the used programming language will improve the inspection rate of widgets
 - EJ -\> B: Experience in the used programming will identify more bugs
 - EW -\> W: Experience in the technology of the SUT improves the inspection rate of widgets
 - EW -\> B: Experience in the technology of the SUT improves the identification of bugs
@@ -57,3 +68,7 @@ Assumptions:
 equivalentDAGs(dag)
 impliedConditionalIndependencies(dag)
 ```
+
+## References
+
+[1] Coppola, R., Fulcini, T., Ardito, L., Torchiano, M. & Alégroth, E., Gamification: the next Silver Bullet for Exploratory GUI Testing? (in revision)
