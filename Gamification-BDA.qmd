@@ -1,6 +1,6 @@
 ---
 title: "Gamification BDA"
-execute: 
+execute:
   echo: false
 ---
 
@@ -12,7 +12,7 @@ GUI-based tests can verify a system's behavior through interactions with its GUI
 One approach to increase the engagement and motivation of people performing a task is Gamification, where elements originated in games are applied in a non-gaming context.
 In the context of exploratory GUI-based testing, Gamification could improve testers' engagement and therefore improve the outcome of test activities.
 
-Coppola et al. [1] conducted an experiment with 144 participants to investigate how Gamification would impact the effectiveness and efficiency of exploratory GUI testing. 
+Coppola et al. [1] conducted an experiment with 144 participants to investigate how Gamification would impact the effectiveness and efficiency of exploratory GUI testing.
 
 In this project, I perform a (re-)analysis of the impacts of Gamification for exploratory GUI testing using Bayesian Data Analysis (BDA).
 Input for this analysis is the [replication package](https://figshare.com/projects/GamificationReplicationPackage/127202) from the experiment [1].
@@ -72,3 +72,6 @@ impliedConditionalIndependencies(dag)
 ## References
 
 [1] Coppola, R., Fulcini, T., Ardito, L., Torchiano, M. & Alégroth, E., Gamification: the next Silver Bullet for Exploratory GUI Testing? (in revision)
+
+[2] McElreath, R. (2020). Statistical rethinking: A Bayesian course with examples in R and Stan.
+
