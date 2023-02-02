@@ -6,3 +6,5 @@ cmdstanr::install_cmdstan()
 
 install.packages(c("coda", "mvtnorm","loo"))
 devtools::install_github("rmcelreath/rethinking")
+
+install.packages("tidyverse")
