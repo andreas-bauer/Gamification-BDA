@@ -80,6 +80,21 @@ A relationship between EF and WE only appears if you condition on W; otherwise, 
 **Descendent**: The DAG consists of multiple descendent relationships, e.g., `AW -> COV <- B; COV -> EF`.
 A descendent (EF) is influenced by another variable (COV).
 
+## Estimating probability distributions
+
+`EJ, WE, ET ~ log-normal(µ, σ)`
+
+`AW  ~ log-normal(µ, σ)`
+
+`COV ~ log-normal(µ, σ)`
+
+`EF  ~ log-normal(µ, σ)`
+
+`B   ~ possion(λ)`
+
+`W   ~ possion(λ)`
+``
+
 ## Import data from the replication package
 
 Load raw data from replication package.
@@ -90,7 +105,7 @@ withGameRaw <- read.csv(file = 'data/gamified_sessions.csv', header = TRUE, sep 
 withoutGameRaw <- read.csv(file = 'data/non_gamified_sessions.csv', header = TRUE, sep = ';')
 ```
 
-Cleanup demographic data by replacing string representations of the experience levels with categorical numbers (1,2, and 3). 
+Cleanup demographic data by replacing string representations of the experience levels with categorical numbers (1,2, and 3).
 Further, incomplete rows are removed
 ```{r}
 demographic <- subset(demographicRaw, select = c(Group, Students.ID, expertise.in.java, expertise.in.sw.testing, expertise.in.web.app.development))
@@ -106,7 +121,7 @@ colnames(demographic)[5] = "expWeb"
 
 expLessThan1Year = 1
 expBetween1and3Years = 2
-expMoreThan3Years = 3 
+expMoreThan3Years = 3
 
 expAsNumeric <- Vectorize(vectorize.args = "expLevel", FUN = function(expLevel) {
   experience = tolower(expLevel)
