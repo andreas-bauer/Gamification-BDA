@@ -17,6 +17,16 @@ Coppola et al. [1] conducted an experiment with 144 participants to investigate 
 In this project, I perform a (re-)analysis of the impacts of Gamification for exploratory GUI testing using Bayesian Data Analysis (BDA).
 Input for this analysis is the [replication package](https://figshare.com/projects/GamificationReplicationPackage/127202) from the experiment [1].
 
+## Prerequisites
+
+```{r}
+suppressPackageStartupMessages(library(dagitty))
+suppressPackageStartupMessages(library(rethinking))
+suppressPackageStartupMessages(library(magrittr))
+suppressPackageStartupMessages(library(tidyverse))
+```
+
+
 ## Directed Acyclic Graph (DAG)
 
 A DAG helps us to understand the relationships between the different variables visually.
@@ -32,8 +42,6 @@ A DAG helps us to understand the relationships between the different variables v
 - **AW**: Average number of widgets on a page
 
 ```{r}
-suppressPackageStartupMessages(library(dagitty))
-suppressPackageStartupMessages(library(rethinking))
 dag <- dagitty("dag {
 G -> W
 G -> B
@@ -82,6 +90,8 @@ A descendent (EF) is influenced by another variable (COV).
 
 ## Estimating probability distributions
 
+`G ~ binomial(n, p)`
+
 `EJ, WE, ET ~ log-normal(µ, σ)`
 
 `AW  ~ log-normal(µ, σ)`
@@ -100,24 +110,16 @@ A descendent (EF) is influenced by another variable (COV).
 Load raw data from replication package.
 
 ```{r}
-demographicRaw <- read.csv(file = 'data/demographic.csv', header = TRUE, sep = ';')
-withGameRaw <- read.csv(file = 'data/gamified_sessions.csv', header = TRUE, sep = ';')
-withoutGameRaw <- read.csv(file = 'data/non_gamified_sessions.csv', header = TRUE, sep = ';')
+demographicRaw <- read.csv(file = 'data/demographic.csv', header = TRUE, sep = ';', nrows=152)
+withGameRaw <- read.csv(file = 'data/gamified_sessions.csv', header = TRUE, sep = ';', nrows=152)
+withoutGameRaw <- read.csv(file = 'data/non_gamified_sessions.csv', header = TRUE, sep = ';', nrows=152)
 ```
 
 Cleanup demographic data by replacing string representations of the experience levels with categorical numbers (1,2, and 3).
-Further, incomplete rows are removed
 ```{r}
 demographic <- subset(demographicRaw, select = c(Group, Students.ID, expertise.in.java, expertise.in.sw.testing, expertise.in.web.app.development))
 
-# remove incomplete rows
-demographic <- demographic[complete.cases(demographic),]
-
-colnames(demographic)[1] = "group"
-colnames(demographic)[2] = "studentId"
-colnames(demographic)[3] = "expJava"
-colnames(demographic)[4] = "expTesting"
-colnames(demographic)[5] = "expWeb"
+names(demographic) <- c("group", "studentId", "expJava", "expTest", "expWeb")
 
 expLessThan1Year = 1
 expBetween1and3Years = 2
@@ -141,6 +143,16 @@ demographic[3:5] <- lapply(demographic[3:5], expAsNumeric)
 demographic[3:5] <- lapply(demographic[3:5], factor)
 ```
 
+```{r}
+withGame <- subset(withGameRaw, select = c(Group, Students.ID, Coverage.G, X..Interactions.G, X..Issue.G))
+
+names(withGame) <- c("group", "studentId", "coverage", "widgetdInspected", "bugsIdentified")
+
+withGame <- withGame %>% mutate(coverage = str_replace(coverage,",",".") %>% 
+                      str_replace("%","") %>% 
+                      as.numeric() %>% 
+                      (function(x) x/100))
+```
 
 ## References
 
