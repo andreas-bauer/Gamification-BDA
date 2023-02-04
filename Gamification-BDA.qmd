@@ -90,7 +90,7 @@ A descendent (EF) is influenced by another variable (COV).
 
 ## Estimating probability distributions
 
-`G ~ binomial(n, p)`
+`G ~ beta-binomial(n, p, θ)`
 
 `EJ, WE, ET ~ log-normal(µ, σ)`
 
@@ -115,7 +115,8 @@ withGameRaw <- read.csv(file = 'data/gamified_sessions.csv', header = TRUE, sep 
 withoutGameRaw <- read.csv(file = 'data/non_gamified_sessions.csv', header = TRUE, sep = ';', nrows=152)
 ```
 
-Cleanup demographic data by replacing string representations of the experience levels with categorical numbers (1,2, and 3).
+Cleanup demographic data by replacing string representations of the experience levels with ordered categorical numbers (1,2, and 3).
+The differences between categorical numbers are not equal, e.g., a person with 3 years of experience with testing will not result in 3 times better outcome compared to one with 1 year of experience.
 ```{r}
 demographic <- subset(demographicRaw, select = c(Group, Students.ID, expertise.in.java, expertise.in.sw.testing, expertise.in.web.app.development))
 
@@ -152,6 +153,21 @@ withGame <- withGame %>% mutate(coverage = str_replace(coverage,",",".") %>%
                       str_replace("%","") %>% 
                       as.numeric() %>% 
                       (function(x) x/100))
+```
+
+## Estimating model parameters
+
+Bases on my understanding of the field of GUI-based testing, I estimate average values for the parameters, which makes those weakly informative priors.
+
+```{r}
+set.seed(2023)
+N <- 100
+alpha <- rlnorm(N, 5, 1)
+
+for (i in i:N)
+  curve(dlnorm(x,4,1), from = 0, to=N*2, n=N, xlab="N", ylab = "dlnorm(µ, σ)",  col = "blue")
+  curve(dlnorm(x,5,1), from = 0, to=N*2, n=N,  col = "red", add = TRUE)
+  curve(dlnorm(x,4.6,0.6), from = 0, to=N*2, n=N,  col = "orange", add = TRUE)
 ```
 
 ## References
