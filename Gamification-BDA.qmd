@@ -88,19 +88,27 @@ A relationship between EF and WE only appears if you condition on W; otherwise, 
 **Descendent**: The DAG consists of multiple descendent relationships, e.g., `AW -> COV <- B; COV -> EF`.
 A descendent (EF) is influenced by another variable (COV).
 
+## DAG simpified version
+
+The presented DAG would require a multi-level model and a general more complex approach to investigate the impact of Gamification on the effectiveness of tests.
+For this reason, I simplified the DAG as a starting point for the analysis.
+In the following DAG, the amount of inspected widgets (W) serves as a proxy to understand the impact of Gamification.
+
+```{r}
+dag <- dagitty("dag {
+G -> W
+EJ -> W
+EW -> W
+ET -> W
+}")
+drawdag(dag)
+```
+
 ## Estimating probability distributions
 
 `G ~ beta-binomial(n, p, θ)`
 
 `EJ, WE, ET ~ log-normal(µ, σ)`
-
-`AW  ~ log-normal(µ, σ)`
-
-`COV ~ log-normal(µ, σ)`
-
-`EF  ~ log-normal(µ, σ)`
-
-`B   ~ possion(λ)`
 
 `W   ~ possion(λ)`
 ``
