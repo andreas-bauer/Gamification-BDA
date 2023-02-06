@@ -171,14 +171,62 @@ game_merged <- merge(game_merged, demographic, by="studentId")
 Bases on my understanding of the field of GUI-based testing, I estimate average values for the parameters, which makes those weakly informative priors.
 
 ```{r}
+for (i in 1:5) {
+  am <- mean(rlnorm(1000, i, 1))
+  print(paste("meanlog", i, ":", round(am)))
+}
+```
+A mean deviation of 3 for `rlnorm` results in a mean of 33 which is a good starting point for a predictor.
+
+```{r}
+N <- 100
+curve(dlnorm(x,3,1), from = 0, to=N*1.5, n=N, xlab="N", ylab = "dlnorm(3, 1)",  col = "blue")
+```
+Of the three experience properties, experience with testing should have the highest impact, flowed by experience with web development and experience with Java: `ET > EW > EJ`
+Therefore, priors for `EW` and `EJ` should be smaller.
+```{r}
+for (i in c(2, 2.2, 2.4, 2.6, 2.8)) {
+  am <- mean(rlnorm(1000, i, 1))
+  print(paste("meanlog", i, ":", round(am)))
+}
+```
+
+```{r}
 set.seed(2023)
 N <- 100
-alpha <- rlnorm(N, 5, 1)
+b_T <- rlnorm(N, 3, 1 )
+b_W <- rlnorm(N, 2.6, 1)
+b_J <- rlnorm(N, 2.4, 1)
+plot( NULL , xlim=c(0,3) , ylim=c(0,100) )
+for (i in 1:N) {
+  curve(a[i] + b_T[i]*x + b_W[i]*x + b_J[i]*x,  col = "blue", add = TRUE)
+}
+```
 
-for (i in i:N)
-  curve(dlnorm(x,4,1), from = 0, to=N*2, n=N, xlab="N", ylab = "dlnorm(µ, σ)",  col = "blue")
-  curve(dlnorm(x,5,1), from = 0, to=N*2, n=N,  col = "red", add = TRUE)
-  curve(dlnorm(x,4.6,0.6), from = 0, to=N*2, n=N,  col = "orange", add = TRUE)
+## Model
+
+```{r}
+m1 <- ulam(
+  alist(widgetsInspected ~ dpois(lam),
+    log(lam) <- alpha,    
+    alpha ~ dlnorm(3, 1)
+    ), data=game_merged, 
+  chains=4, 
+  log_lik = TRUE # if TRUE ULAM computes values for PSIS and WAIC
+)
+precis(m1, depth=2)
+```
+
+```{r}
+m3 <- ulam(
+  alist(widgetsInspected ~ dpois(lam),
+    log(lam) <- b_T*expTest + b_W*expWeb + b_J*expJava,    
+    b_T ~ dlnorm(3, 1),
+    b_W ~ dlnorm(2.6, 1),
+    b_J ~ dlnorm(2.4, 1)
+    ), data=game_merged, chains=4, log_lik = TRUE
+)
+precis(m3, depth=2)
 ```
 
 ## References
