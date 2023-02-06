@@ -126,9 +126,9 @@ withoutGameRaw <- read.csv(file = 'data/non_gamified_sessions.csv', header = TRU
 Cleanup demographic data by replacing string representations of the experience levels with ordered categorical numbers (1,2, and 3).
 The differences between categorical numbers are not equal, e.g., a person with 3 years of experience with testing will not result in 3 times better outcome compared to one with 1 year of experience.
 ```{r}
-demographic <- subset(demographicRaw, select = c(Group, Students.ID, expertise.in.java, expertise.in.sw.testing, expertise.in.web.app.development))
+demographic <- subset(demographicRaw, select = c(Students.ID, expertise.in.java, expertise.in.sw.testing, expertise.in.web.app.development))
 
-names(demographic) <- c("group", "studentId", "expJava", "expTest", "expWeb")
+names(demographic) <- c("studentId", "expJava", "expTest", "expWeb")
 
 expLessThan1Year = 1
 expBetween1and3Years = 2
@@ -146,21 +146,24 @@ expAsNumeric <- Vectorize(vectorize.args = "expLevel", FUN = function(expLevel) 
 })
 
 # transform strings to numerical values
-demographic[3:5] <- lapply(demographic[3:5], expAsNumeric)
+demographic[2:4] <- lapply(demographic[2:4], expAsNumeric)
 
 # transform numerical values to categorical values
-demographic[3:5] <- lapply(demographic[3:5], factor)
+demographic[2:4] <- lapply(demographic[2:4], factor)
 ```
 
 ```{r}
-withGame <- subset(withGameRaw, select = c(Group, Students.ID, Coverage.G, X..Interactions.G, X..Issue.G))
+withGame <- subset(withGameRaw, select = c(Students.ID, X..Interactions.G))
 
-names(withGame) <- c("group", "studentId", "coverage", "widgetdInspected", "bugsIdentified")
+names(withGame) <- c("studentId", "widgetsInspected")
+withGame['gamification'] <- 1
 
-withGame <- withGame %>% mutate(coverage = str_replace(coverage,",",".") %>% 
-                      str_replace("%","") %>% 
-                      as.numeric() %>% 
-                      (function(x) x/100))
+withoutGame <- subset(withoutGameRaw, select = c(Students.ID, X..Interactions))
+names(withoutGame) <- c("studentId", "widgetsInspected")
+withoutGame['gamification'] <- 0
+
+game_merged <-rbind(withGame, withoutGame)
+game_merged <- merge(game_merged, demographic, by="studentId")
 ```
 
 ## Estimating model parameters
