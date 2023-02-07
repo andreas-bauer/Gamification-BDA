@@ -158,6 +158,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Coppola et al.&nbsp;[1] conducted an experiment with 144 participants to investigate how Gamification would impact the effectiveness and efficiency of exploratory GUI testing.</p>
 <p>In this project, I perform a (re-)analysis of the impacts of Gamification for exploratory GUI testing using Bayesian Data Analysis (BDA). Input for this analysis is the <a href="https://figshare.com/projects/GamificationReplicationPackage/127202">replication package</a> from the experiment [1].</p>
 </section>
+<section id="prerequisites" class="level2">
+<h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(dagitty))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(rethinking))</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(magrittr))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(tidyverse))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 <section id="directed-acyclic-graph-dag" class="level2">
 <h2 class="anchored" data-anchor-id="directed-acyclic-graph-dag">Directed Acyclic Graph (DAG)</h2>
 <p>A DAG helps us to understand the relationships between the different variables visually.</p>
@@ -173,25 +182,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><strong>AW</strong>: Average number of widgets on a page</li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(dagitty))</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(<span class="fu">library</span>(rethinking))</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">dagitty</span>(<span class="st">"dag {</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="st">G -&gt; W</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="st">G -&gt; B</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="st">EJ -&gt; W</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="st">EJ -&gt; B</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="st">EW -&gt; W</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="st">EW -&gt; B</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="st">ET -&gt; W</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="st">ET -&gt; B</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="st">W -&gt; COV</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="st">B -&gt; COV</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="st">AW -&gt; COV</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="st">COV -&gt; EF</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="st">}"</span>)</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">drawdag</span>(dag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">dagitty</span>(<span class="st">"dag {</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="st">G -&gt; W</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="st">G -&gt; B</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="st">EJ -&gt; W</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="st">EJ -&gt; B</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="st">EW -&gt; W</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="st">EW -&gt; B</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="st">ET -&gt; W</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="st">ET -&gt; B</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="st">W -&gt; COV</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="st">B -&gt; COV</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="st">AW -&gt; COV</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="st">COV -&gt; EF</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="st">}"</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">drawdag</span>(dag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="Gamification-BDA_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+<p><img src="Gamification-BDA_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Assumptions:</p>
@@ -218,48 +225,228 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>Descendent</strong>: The DAG consists of multiple descendent relationships, e.g., <code>AW -&gt; COV &lt;- B; COV -&gt; EF</code>. A descendent (EF) is influenced by another variable (COV).</p>
 </section>
 </section>
+<section id="dag-simpified-version" class="level2">
+<h2 class="anchored" data-anchor-id="dag-simpified-version">DAG simpified version</h2>
+<p>The presented DAG would require a multi-level model and a general more complex approach to investigate the impact of Gamification on the effectiveness of tests. For this reason, I simplified the DAG as a starting point for the analysis. In the following DAG, the amount of inspected widgets (W) serves as a proxy to understand the impact of Gamification.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dag <span class="ot">&lt;-</span> <span class="fu">dagitty</span>(<span class="st">"dag {</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="st">G -&gt; W</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="st">EJ -&gt; W</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="st">EW -&gt; W</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="st">ET -&gt; W</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="st">}"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">drawdag</span>(dag)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Gamification-BDA_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="estimating-probability-distributions" class="level2">
+<h2 class="anchored" data-anchor-id="estimating-probability-distributions">Estimating probability distributions</h2>
+<p><code>G ~ beta-binomial(n, p, θ)</code></p>
+<p><code>EJ, WE, ET ~ log-normal(µ, σ)</code></p>
+<p><code>W   ~ possion(λ)</code> ``</p>
+</section>
 <section id="import-data-from-the-replication-package" class="level2">
 <h2 class="anchored" data-anchor-id="import-data-from-the-replication-package">Import data from the replication package</h2>
 <p>Load raw data from replication package.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>demographicRaw <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">'data/demographic.csv'</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">';'</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>withGameRaw <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">'data/gamified_sessions.csv'</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">';'</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>withoutGameRaw <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">'data/non_gamified_sessions.csv'</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">';'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>demographicRaw <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">'data/demographic.csv'</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">';'</span>, <span class="at">nrows=</span><span class="dv">152</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>withGameRaw <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">'data/gamified_sessions.csv'</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">';'</span>, <span class="at">nrows=</span><span class="dv">152</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>withoutGameRaw <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="at">file =</span> <span class="st">'data/non_gamified_sessions.csv'</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">';'</span>, <span class="at">nrows=</span><span class="dv">152</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Cleanup demographic data by replacing string representations of the experience levels with categorical numbers (1,2, and 3). Further, incomplete rows are removed</p>
+<p>Cleanup demographic data by replacing string representations of the experience levels with ordered categorical numbers (1,2, and 3). The differences between categorical numbers are not equal, e.g., a person with 3 years of experience with testing will not result in 3 times better outcome compared to one with 1 year of experience.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>demographic <span class="ot">&lt;-</span> <span class="fu">subset</span>(demographicRaw, <span class="at">select =</span> <span class="fu">c</span>(Group, Students.ID, expertise.in.java, expertise.in.sw.testing, expertise.in.web.app.development))</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># remove incomplete rows</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>demographic <span class="ot">&lt;-</span> demographic[<span class="fu">complete.cases</span>(demographic),]</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(demographic)[<span class="dv">1</span>] <span class="ot">=</span> <span class="st">"group"</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(demographic)[<span class="dv">2</span>] <span class="ot">=</span> <span class="st">"studentId"</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(demographic)[<span class="dv">3</span>] <span class="ot">=</span> <span class="st">"expJava"</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(demographic)[<span class="dv">4</span>] <span class="ot">=</span> <span class="st">"expTesting"</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(demographic)[<span class="dv">5</span>] <span class="ot">=</span> <span class="st">"expWeb"</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>expLessThan1Year <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>expBetween1and3Years <span class="ot">=</span> <span class="dv">2</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>expMoreThan3Years <span class="ot">=</span> <span class="dv">3</span> </span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>expAsNumeric <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="at">vectorize.args =</span> <span class="st">"expLevel"</span>, <span class="at">FUN =</span> <span class="cf">function</span>(expLevel) {</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  experience <span class="ot">=</span> <span class="fu">tolower</span>(expLevel)</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">=</span> <span class="cf">switch</span>(</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    experience,</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"less than one year"</span><span class="ot">=</span>expLessThan1Year,</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"between one year and three years"</span><span class="ot">=</span>expBetween1and3Years,</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"more than three years"</span><span class="ot">=</span>expMoreThan3Years,</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co"># transform strings to numerical values</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>demographic[<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(demographic[<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>], expAsNumeric)</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co"># transform numerical values to categorical values</span></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>demographic[<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(demographic[<span class="dv">3</span><span class="sc">:</span><span class="dv">5</span>], factor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>demographic <span class="ot">&lt;-</span> <span class="fu">subset</span>(demographicRaw, <span class="at">select =</span> <span class="fu">c</span>(Students.ID, expertise.in.java, expertise.in.sw.testing, expertise.in.web.app.development))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(demographic) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"studentId"</span>, <span class="st">"expJava"</span>, <span class="st">"expTest"</span>, <span class="st">"expWeb"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>expLessThan1Year <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>expBetween1and3Years <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>expMoreThan3Years <span class="ot">=</span> <span class="dv">3</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>expAsNumeric <span class="ot">&lt;-</span> <span class="fu">Vectorize</span>(<span class="at">vectorize.args =</span> <span class="st">"expLevel"</span>, <span class="at">FUN =</span> <span class="cf">function</span>(expLevel) {</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  experience <span class="ot">=</span> <span class="fu">tolower</span>(expLevel)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  result <span class="ot">=</span> <span class="cf">switch</span>(</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    experience,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"less than one year"</span><span class="ot">=</span>expLessThan1Year,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"between one year and three years"</span><span class="ot">=</span>expBetween1and3Years,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"more than three years"</span><span class="ot">=</span>expMoreThan3Years,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co"># transform strings to numerical values</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>demographic[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(demographic[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>], expAsNumeric)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co"># transform numerical values to categorical values</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>demographic[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>] <span class="ot">&lt;-</span> <span class="fu">lapply</span>(demographic[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>], factor)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>withGame <span class="ot">&lt;-</span> <span class="fu">subset</span>(withGameRaw, <span class="at">select =</span> <span class="fu">c</span>(Students.ID, X..Interactions.G))</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(withGame) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"studentId"</span>, <span class="st">"widgetsInspected"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>withGame[<span class="st">'gamification'</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>withoutGame <span class="ot">&lt;-</span> <span class="fu">subset</span>(withoutGameRaw, <span class="at">select =</span> <span class="fu">c</span>(Students.ID, X..Interactions))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(withoutGame) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"studentId"</span>, <span class="st">"widgetsInspected"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>withoutGame[<span class="st">'gamification'</span>] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>game_merged <span class="ot">&lt;-</span><span class="fu">rbind</span>(withGame, withoutGame)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>game_merged <span class="ot">&lt;-</span> <span class="fu">merge</span>(game_merged, demographic, <span class="at">by=</span><span class="st">"studentId"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="estimating-model-parameters" class="level2">
+<h2 class="anchored" data-anchor-id="estimating-model-parameters">Estimating model parameters</h2>
+<p>Bases on my understanding of the field of GUI-based testing, I estimate average values for the parameters, which makes those weakly informative priors.</p>
+<p>For alpha, the general expectation to interact with widgets of a system I look for a value ~ 25.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  am <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">rlnorm</span>(<span class="dv">1000</span>, i, <span class="dv">1</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"meanlog"</span>, i, <span class="st">":"</span>, <span class="fu">round</span>(am)))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "meanlog 1 : 4"
+[1] "meanlog 2 : 12"
+[1] "meanlog 3 : 30"
+[1] "meanlog 4 : 92"
+[1] "meanlog 5 : 249"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">c</span>(<span class="fl">2.2</span>, <span class="fl">2.4</span>, <span class="fl">2.6</span>, <span class="fl">2.8</span>)) {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  am <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">rlnorm</span>(<span class="dv">1000</span>, i, <span class="dv">1</span>))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"meanlog"</span>, i, <span class="st">":"</span>, <span class="fu">round</span>(am)))</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "meanlog 2.2 : 15"
+[1] "meanlog 2.4 : 19"
+[1] "meanlog 2.6 : 23"
+[1] "meanlog 2.8 : 26"</code></pre>
+</div>
+</div>
+<p><code>lnorm(2.6, 1)</code> seems to be a good candidate for alpha.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">dlnorm</span>(x,<span class="fl">2.6</span>,<span class="dv">1</span>), <span class="at">from =</span> <span class="dv">0</span>, <span class="at">to=</span>N, <span class="at">n=</span>N, <span class="at">xlab=</span><span class="st">"N"</span>, <span class="at">ylab =</span> <span class="st">"dlnorm(3, 1)"</span>,  <span class="at">col =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Gamification-BDA_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>For the different experience levels (ET, EW, ET), I make the following assumptions:</p>
+<ul>
+<li>The mean value for experience with Java is 2 years with a standard deviation of 1 year.</li>
+<li>The mean value for experience with web development is 2 years with a standard deviation of 1 year.</li>
+<li>The mean value for experience with testing is 1.5 years with a standard deviation of 1 year.</li>
+<li>The impact of Gamification should be less then from experience in Java, web development, or testing.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>b_EJ <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="dv">2</span>, <span class="fl">0.5</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>b_EW <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="dv">2</span>, <span class="fl">0.5</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>b_ET <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="fl">1.5</span>, <span class="fl">0.5</span> )</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>b_G <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="dv">1</span>, <span class="fl">0.5</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The Gamification parameter has a binomial distribution and are either 1 or 0.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>b_G <span class="ot">&lt;-</span> <span class="fu">dbinom</span>(N, <span class="dv">1</span>, <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2023</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="fl">2.6</span>, <span class="dv">1</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>b_EJ <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="dv">2</span>, <span class="fl">0.5</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>b_EW <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="dv">2</span>, <span class="fl">0.5</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>b_ET <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="fl">1.5</span>, <span class="fl">0.5</span> )</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>b_G <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( <span class="cn">NULL</span> , <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">3</span>) , <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>), <span class="at">ylab =</span> <span class="st">"Interactions with Widgets"</span>, <span class="at">xlab =</span> <span class="st">"STD"</span> )</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N) {</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">curve</span>(a[i] <span class="sc">+</span>  b_EJ[i]<span class="sc">*</span>x <span class="sc">+</span> b_EW[i]<span class="sc">*</span>x <span class="sc">+</span> b_ET[i]<span class="sc">*</span>x <span class="sc">+</span> b_G[i]<span class="sc">*</span>x,  <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Gamification-BDA_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The predictor values for the first attempt of a model look promising since there are not scattered too much. Reducing the standard deviation results in a more narrow range of values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2023</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>N <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="fl">2.6</span>, <span class="fl">0.4</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>b_EJ <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="dv">2</span>, <span class="fl">0.4</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>b_EW <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="dv">2</span>, <span class="fl">0.4</span>)</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>b_ET <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="fl">1.5</span>, <span class="fl">0.4</span> )</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>b_G <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="dv">1</span>, <span class="fl">0.4</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( <span class="cn">NULL</span> , <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">3</span>) , <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>), <span class="at">ylab =</span> <span class="st">"Interactions with widgets"</span>, <span class="at">xlab =</span> <span class="st">"STD"</span> )</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N) {</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">curve</span>(a[i] <span class="sc">+</span>  b_EJ[i]<span class="sc">*</span>x <span class="sc">+</span> b_EW[i]<span class="sc">*</span>x <span class="sc">+</span> b_ET[i]<span class="sc">*</span>x <span class="sc">+</span> b_G[i]<span class="sc">*</span>x,  <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Gamification-BDA_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="model" class="level2">
+<h2 class="anchored" data-anchor-id="model">Model</h2>
+<p><code>W   ~ possion(λ)</code></p>
+<p>Model 1: <code>log(λ) &lt;- α</code></p>
+<p>Model 2: <code>log(λ) &lt;- α + βg*gamification</code></p>
+<p>Model 3: <code>log(λ) &lt;- α + βej*EJ + βew*EW + βet*ET + βg*gamification</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>m1 <span class="ot">&lt;-</span> <span class="fu">ulam</span>(</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">alist</span>(widgetsInspected <span class="sc">~</span> <span class="fu">dpois</span>(lam),</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>(lam) <span class="ot">&lt;-</span> alpha,    </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    alpha <span class="sc">~</span> <span class="fu">dlnorm</span>(<span class="fl">2.6</span>, <span class="fl">0.4</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    ), <span class="at">data=</span>game_merged, </span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains=</span><span class="dv">4</span>, <span class="co"># number of independent chain to sample from</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">log_lik =</span> <span class="cn">TRUE</span> <span class="co"># if TRUE ULAM computes values for PSIS and WAIC</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">precis</span>(m1, <span class="at">depth=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          mean          sd     5.5%    94.5%    n_eff    Rhat4
+alpha 4.854779 0.005176709 4.846716 4.863131 680.6048 1.004452</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>m2<span class="ot">&lt;-</span> <span class="fu">ulam</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">alist</span>(widgetsInspected <span class="sc">~</span> <span class="fu">dpois</span>(lam),</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>(lam) <span class="ot">&lt;-</span> alpha <span class="sc">+</span> b_G<span class="sc">*</span>gamification,    </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    alpha <span class="sc">~</span> <span class="fu">dlnorm</span>(<span class="fl">2.6</span>, <span class="fl">0.4</span>),</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    b_G <span class="sc">~</span> <span class="fu">dlnorm</span>(<span class="dv">1</span>, <span class="fl">0.4</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    ), <span class="at">data=</span>game_merged, <span class="at">chains=</span><span class="dv">4</span>, <span class="at">log_lik =</span> <span class="cn">TRUE</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">precis</span>(m2, <span class="at">depth=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           mean          sd     5.5%     94.5%    n_eff    Rhat4
+alpha 4.7900877 0.007377442 4.778279 4.8016833 470.6433 1.009661
+b_G   0.1252739 0.009944860 0.109400 0.1416303 363.0923 1.014149</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>m3 <span class="ot">&lt;-</span> <span class="fu">ulam</span>(</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">alist</span>(widgetsInspected <span class="sc">~</span> <span class="fu">dpois</span>(lam),</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>(lam) <span class="ot">&lt;-</span> alpha <span class="sc">+</span> b_EJ<span class="sc">*</span>expJava <span class="sc">+</span> b_EW<span class="sc">*</span>expWeb <span class="sc">+</span> b_ET<span class="sc">*</span>expTest <span class="sc">+</span> b_G<span class="sc">*</span>gamification,    </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    alpha <span class="sc">~</span> <span class="fu">dlnorm</span>(<span class="fl">2.6</span>, <span class="fl">0.4</span>),    </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    b_EJ <span class="sc">~</span> <span class="fu">dlnorm</span>(<span class="dv">2</span>, <span class="fl">0.4</span>),</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    b_EW <span class="sc">~</span> <span class="fu">dlnorm</span>(<span class="dv">2</span>, <span class="fl">0.4</span>),</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    b_ET <span class="sc">~</span> <span class="fu">dlnorm</span>(<span class="fl">1.5</span>, <span class="fl">0.4</span>),</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    b_G <span class="sc">~</span> <span class="fu">dlnorm</span>(<span class="dv">1</span>, <span class="fl">0.4</span>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    ), <span class="at">data=</span>game_merged, <span class="at">chains=</span><span class="dv">4</span>, <span class="at">log_lik =</span> <span class="cn">TRUE</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">precis</span>(m3, <span class="at">depth=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            mean          sd       5.5%      94.5%    n_eff    Rhat4
+alpha 4.37818531 0.020309787 4.34601305 4.41146275 1223.945 1.002397
+b_EJ  0.18980600 0.009767010 0.17423123 0.20527054 1423.254 1.001523
+b_EW  0.01793723 0.002532670 0.01407999 0.02215322 1819.917 1.001086
+b_ET  0.03652644 0.005329249 0.02848475 0.04539120 1782.183 0.998887
+b_G   0.12628794 0.009808516 0.11077101 0.14143065 1561.875 1.000076</code></pre>
+</div>
+</div>
+<p><code>n_eff</code> is an estimation of the number of independent samples [2].</p>
+<p><code>Rhat</code> is an indicator of the convergence of the Markov chains to the target distribution and should approach 1.0 [2].</p>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
