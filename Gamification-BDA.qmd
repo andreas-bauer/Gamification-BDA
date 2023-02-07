@@ -2,6 +2,7 @@
 title: "Gamification BDA"
 execute:
   echo: true
+  warning: false
 ---
 
 ## Introduction
@@ -170,64 +171,137 @@ game_merged <- merge(game_merged, demographic, by="studentId")
 
 Bases on my understanding of the field of GUI-based testing, I estimate average values for the parameters, which makes those weakly informative priors.
 
+For alpha, the general expectation to interact with widgets of a system I look for a value ~ 25.
 ```{r}
 for (i in 1:5) {
   am <- mean(rlnorm(1000, i, 1))
   print(paste("meanlog", i, ":", round(am)))
 }
-```
-A mean deviation of 3 for `rlnorm` results in a mean of 33 which is a good starting point for a predictor.
-
-```{r}
-N <- 100
-curve(dlnorm(x,3,1), from = 0, to=N*1.5, n=N, xlab="N", ylab = "dlnorm(3, 1)",  col = "blue")
-```
-Of the three experience properties, experience with testing should have the highest impact, flowed by experience with web development and experience with Java: `ET > EW > EJ`
-Therefore, priors for `EW` and `EJ` should be smaller.
-```{r}
-for (i in c(2, 2.2, 2.4, 2.6, 2.8)) {
+for (i in c(2.2, 2.4, 2.6, 2.8)) {
   am <- mean(rlnorm(1000, i, 1))
   print(paste("meanlog", i, ":", round(am)))
 }
+```
+`lnorm(2.6, 1)` seems to be a good candidate for alpha.
+
+```{r}
+N <- 100
+curve(dlnorm(x,2.6,1), from = 0, to=N, n=N, xlab="N", ylab = "dlnorm(3, 1)",  col = "blue")
+```
+
+For the different experience levels (ET, EW, ET), I make the following assumptions:
+
+- The mean value for experience with Java is 2 years with a standard deviation of 1 year.
+- The mean value for experience with web development is 2 years with a standard deviation of 1 year.
+- The mean value for experience with testing is 1.5 years with a standard deviation of 1 year.
+- The impact of Gamification should be less then from experience in Java, web development, or testing.
+
+```{r}
+b_EJ <- rlnorm(N, 2, 0.5)
+b_EW <- rlnorm(N, 2, 0.5)
+b_ET <- rlnorm(N, 1.5, 0.5 )
+b_G <- rlnorm(N, 1, 0.5 )
+```
+
+The Gamification parameter has a binomial distribution and are either 1 or 0.
+
+```{r}
+b_G <- dbinom(N, 1, 0.5)
 ```
 
 ```{r}
 set.seed(2023)
 N <- 100
-b_T <- rlnorm(N, 3, 1 )
-b_W <- rlnorm(N, 2.6, 1)
-b_J <- rlnorm(N, 2.4, 1)
-plot( NULL , xlim=c(0,3) , ylim=c(0,100) )
+a <- rlnorm(N, 2.6, 1)
+b_EJ <- rlnorm(N, 2, 0.5)
+b_EW <- rlnorm(N, 2, 0.5)
+b_ET <- rlnorm(N, 1.5, 0.5 )
+b_G <- rlnorm(N, 1, 0.5)
+plot( NULL , xlim=c(0,3) , ylim=c(0,100), ylab = "Interactions with Widgets", xlab = "STD" )
 for (i in 1:N) {
-  curve(a[i] + b_T[i]*x + b_W[i]*x + b_J[i]*x,  col = "blue", add = TRUE)
+  curve(a[i] +  b_EJ[i]*x + b_EW[i]*x + b_ET[i]*x + b_G[i]*x,  col = "blue", add = TRUE)
+}
+```
+
+The predictor values for the first attempt of a model look promising since there are not scattered too much.
+Reducing the standard deviation results in a more narrow range of values.
+
+```{r}
+set.seed(2023)
+N <- 100
+a <- rlnorm(N, 2.6, 0.4)
+b_EJ <- rlnorm(N, 2, 0.4)
+b_EW <- rlnorm(N, 2, 0.4)
+b_ET <- rlnorm(N, 1.5, 0.4 )
+b_G <- rlnorm(N, 1, 0.4)
+plot( NULL , xlim=c(0,3) , ylim=c(0,100), ylab = "Interactions with widgets", xlab = "STD" )
+for (i in 1:N) {
+  curve(a[i] +  b_EJ[i]*x + b_EW[i]*x + b_ET[i]*x + b_G[i]*x,  col = "blue", add = TRUE)
 }
 ```
 
 ## Model
 
+`W   ~ possion(λ)`
+
+Model 1: `log(λ) <- α`
+
+Model 2: `log(λ) <- α + βg*gamification`
+
+Model 3: `log(λ) <- α + βej*EJ + βew*EW + βet*ET + βg*gamification`
+
 ```{r}
+#| output: false
 m1 <- ulam(
   alist(widgetsInspected ~ dpois(lam),
     log(lam) <- alpha,    
-    alpha ~ dlnorm(3, 1)
+    alpha ~ dlnorm(2.6, 0.4)
     ), data=game_merged, 
-  chains=4, 
+  chains=4, # number of independent chain to sample from
   log_lik = TRUE # if TRUE ULAM computes values for PSIS and WAIC
 )
+```
+
+```{r}
 precis(m1, depth=2)
 ```
 
 ```{r}
-m3 <- ulam(
+#| output: false
+m2<- ulam(
   alist(widgetsInspected ~ dpois(lam),
-    log(lam) <- b_T*expTest + b_W*expWeb + b_J*expJava,    
-    b_T ~ dlnorm(3, 1),
-    b_W ~ dlnorm(2.6, 1),
-    b_J ~ dlnorm(2.4, 1)
+    log(lam) <- alpha + b_G*gamification,    
+    alpha ~ dlnorm(2.6, 0.4),
+    b_G ~ dlnorm(1, 0.4)
     ), data=game_merged, chains=4, log_lik = TRUE
 )
+```
+
+```{r}
+precis(m2, depth=2)
+```
+
+```{r}
+#| output: false
+m3 <- ulam(
+  alist(widgetsInspected ~ dpois(lam),
+    log(lam) <- alpha + b_EJ*expJava + b_EW*expWeb + b_ET*expTest + b_G*gamification,    
+    alpha ~ dlnorm(2.6, 0.4),    
+    b_EJ ~ dlnorm(2, 0.4),
+    b_EW ~ dlnorm(2, 0.4),
+    b_ET ~ dlnorm(1.5, 0.4),
+    b_G ~ dlnorm(1, 0.4)
+    ), data=game_merged, chains=4, log_lik = TRUE
+)
+```
+
+```{r}
 precis(m3, depth=2)
 ```
+
+`n_eff` is an estimation of the number of independent samples [2].
+
+`Rhat` is an indicator of the convergence of the Markov chains to the target distribution and should approach 1.0 [2].
 
 ## References
 
