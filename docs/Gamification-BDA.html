@@ -306,21 +306,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"meanlog"</span>, i, <span class="st">":"</span>, <span class="fu">round</span>(am)))</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "meanlog 1 : 5"
+<pre><code>[1] "meanlog 1 : 4"
 [1] "meanlog 2 : 13"
 [1] "meanlog 3 : 34"
-[1] "meanlog 4 : 89"
-[1] "meanlog 5 : 250"</code></pre>
+[1] "meanlog 4 : 86"
+[1] "meanlog 5 : 239"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">c</span>(<span class="fl">2.2</span>, <span class="fl">2.4</span>, <span class="fl">2.6</span>, <span class="fl">2.8</span>)) {</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  am <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">rlnorm</span>(<span class="dv">1000</span>, i, <span class="dv">1</span>))</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"meanlog"</span>, i, <span class="st">":"</span>, <span class="fu">round</span>(am)))</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "meanlog 2.2 : 15"
+<pre><code>[1] "meanlog 2.2 : 16"
 [1] "meanlog 2.4 : 19"
-[1] "meanlog 2.6 : 22"
-[1] "meanlog 2.8 : 26"</code></pre>
+[1] "meanlog 2.6 : 21"
+[1] "meanlog 2.8 : 28"</code></pre>
 </div>
 </div>
 <p><code>lnorm(2.6, 1)</code> seems to be a good candidate for alpha.</p>
@@ -449,6 +449,7 @@ b_G   0.12628794 0.009808516 0.11077101 0.14143065 1561.875 1.000076</code></pre
 <p><code>n_eff</code> is an estimation of the number of independent samples [2].</p>
 <p><code>Rhat</code> is an indicator of the convergence of the Markov chains to the target distribution and should approach 1.0 [2].</p>
 <p>Both <code>n_eff</code> and <code>Rhat4</code> values are in an expected value range.</p>
+<p>All three types of experience and Gamification have a positive association with the amount of inspected widgets. Experience with Java <code>b_EJ</code> has the highest association, followed by Gamification <code>b_G</code>. Whereas the experience with web development <code>b_EW</code> and testing <code>b_ET</code> have a very low association to the amount of inspected widgets.</p>
 <p>When comparing the three models m3 has all of the weights (~1), which indicates a strong support for the experience factors.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">compare</span>(m1, m2, m3, <span class="at">func =</span> PSIS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
