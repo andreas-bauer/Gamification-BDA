@@ -308,6 +308,10 @@ precis(m3, depth=2)
 
 Both `n_eff` and `Rhat4` values are in an expected value range.
 
+All three types of experience and Gamification have a positive association with the amount of inspected widgets.
+Experience with Java `b_EJ` has the highest association, followed by Gamification `b_G`.
+Whereas the experience with web development `b_EW` and testing `b_ET` have a very low association to the amount of inspected widgets.
+
 When comparing the three models m3 has all of the weights (~1), which indicates a strong support for the experience factors.
 
 ```{r}
