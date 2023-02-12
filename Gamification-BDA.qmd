@@ -217,7 +217,7 @@ b_EJ <- rlnorm(N, 2, 0.5)
 b_EW <- rlnorm(N, 2, 0.5)
 b_ET <- rlnorm(N, 1.5, 0.5 )
 b_G <- rlnorm(N, 1, 0.5)
-plot( NULL , xlim=c(0,3) , ylim=c(0,100), ylab = "Interactions with Widgets", xlab = "STD" )
+plot( NULL , xlim=c(0,3) , ylim=c(0,100), ylab = "Interactions with Widgets" )
 for (i in 1:N) {
   curve(a[i] +  b_EJ[i]*x + b_EW[i]*x + b_ET[i]*x + b_G[i]*x,  col = "blue", add = TRUE)
 }
@@ -234,13 +234,16 @@ b_EJ <- rlnorm(N, 2, 0.4)
 b_EW <- rlnorm(N, 2, 0.4)
 b_ET <- rlnorm(N, 1.5, 0.4 )
 b_G <- rlnorm(N, 1, 0.4)
-plot( NULL , xlim=c(0,3) , ylim=c(0,100), ylab = "Interactions with widgets", xlab = "STD" )
+plot( NULL , xlim=c(0,3) , ylim=c(0,100), ylab = "Interactions with widgets" )
 for (i in 1:N) {
   curve(a[i] +  b_EJ[i]*x + b_EW[i]*x + b_ET[i]*x + b_G[i]*x,  col = "blue", add = TRUE)
 }
 ```
 
 ## Model
+
+The model that shall describe how Gamification impacts the interactions with widgets is `m3`.
+Additionally, models `m1` and `m2` were created to see the impact of α.
 
 `W   ~ possion(λ)`
 
@@ -302,6 +305,15 @@ precis(m3, depth=2)
 `n_eff` is an estimation of the number of independent samples [2].
 
 `Rhat` is an indicator of the convergence of the Markov chains to the target distribution and should approach 1.0 [2].
+
+Both `n_eff` and `Rhat4` values are in an expected value range.
+
+When comparing the three models m3 has all of the weights (~1), which indicates a strong support for the experience factors.
+
+```{r}
+#| error: false
+compare(m1, m2, m3, func = PSIS)
+```
 
 ## References
 
