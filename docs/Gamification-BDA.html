@@ -306,11 +306,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">"meanlog"</span>, i, <span class="st">":"</span>, <span class="fu">round</span>(am)))</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "meanlog 1 : 4"
-[1] "meanlog 2 : 12"
-[1] "meanlog 3 : 30"
-[1] "meanlog 4 : 92"
-[1] "meanlog 5 : 249"</code></pre>
+<pre><code>[1] "meanlog 1 : 5"
+[1] "meanlog 2 : 13"
+[1] "meanlog 3 : 34"
+[1] "meanlog 4 : 89"
+[1] "meanlog 5 : 250"</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">c</span>(<span class="fl">2.2</span>, <span class="fl">2.4</span>, <span class="fl">2.6</span>, <span class="fl">2.8</span>)) {</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  am <span class="ot">&lt;-</span> <span class="fu">mean</span>(<span class="fu">rlnorm</span>(<span class="dv">1000</span>, i, <span class="dv">1</span>))</span>
@@ -319,7 +319,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "meanlog 2.2 : 15"
 [1] "meanlog 2.4 : 19"
-[1] "meanlog 2.6 : 23"
+[1] "meanlog 2.6 : 22"
 [1] "meanlog 2.8 : 26"</code></pre>
 </div>
 </div>
@@ -356,7 +356,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>b_EW <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="dv">2</span>, <span class="fl">0.5</span>)</span>
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>b_ET <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="fl">1.5</span>, <span class="fl">0.5</span> )</span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>b_G <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( <span class="cn">NULL</span> , <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">3</span>) , <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>), <span class="at">ylab =</span> <span class="st">"Interactions with Widgets"</span>, <span class="at">xlab =</span> <span class="st">"STD"</span> )</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( <span class="cn">NULL</span> , <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">3</span>) , <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>), <span class="at">ylab =</span> <span class="st">"Interactions with Widgets"</span> )</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N) {</span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">curve</span>(a[i] <span class="sc">+</span>  b_EJ[i]<span class="sc">*</span>x <span class="sc">+</span> b_EW[i]<span class="sc">*</span>x <span class="sc">+</span> b_ET[i]<span class="sc">*</span>x <span class="sc">+</span> b_G[i]<span class="sc">*</span>x,  <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -373,7 +373,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>b_EW <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="dv">2</span>, <span class="fl">0.4</span>)</span>
 <span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>b_ET <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="fl">1.5</span>, <span class="fl">0.4</span> )</span>
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>b_G <span class="ot">&lt;-</span> <span class="fu">rlnorm</span>(N, <span class="dv">1</span>, <span class="fl">0.4</span>)</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( <span class="cn">NULL</span> , <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">3</span>) , <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>), <span class="at">ylab =</span> <span class="st">"Interactions with widgets"</span>, <span class="at">xlab =</span> <span class="st">"STD"</span> )</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>( <span class="cn">NULL</span> , <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">3</span>) , <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">100</span>), <span class="at">ylab =</span> <span class="st">"Interactions with widgets"</span> )</span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>N) {</span>
 <span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">curve</span>(a[i] <span class="sc">+</span>  b_EJ[i]<span class="sc">*</span>x <span class="sc">+</span> b_EW[i]<span class="sc">*</span>x <span class="sc">+</span> b_ET[i]<span class="sc">*</span>x <span class="sc">+</span> b_G[i]<span class="sc">*</span>x,  <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -384,6 +384,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="model" class="level2">
 <h2 class="anchored" data-anchor-id="model">Model</h2>
+<p>The model that shall describe how Gamification impacts the interactions with widgets is <code>m3</code>. Additionally, models <code>m1</code> and <code>m2</code> were created to see the impact of α.</p>
 <p><code>W   ~ possion(λ)</code></p>
 <p>Model 1: <code>log(λ) &lt;- α</code></p>
 <p>Model 2: <code>log(λ) &lt;- α + βg*gamification</code></p>
@@ -447,6 +448,17 @@ b_G   0.12628794 0.009808516 0.11077101 0.14143065 1561.875 1.000076</code></pre
 </div>
 <p><code>n_eff</code> is an estimation of the number of independent samples [2].</p>
 <p><code>Rhat</code> is an indicator of the convergence of the Markov chains to the target distribution and should approach 1.0 [2].</p>
+<p>Both <code>n_eff</code> and <code>Rhat4</code> values are in an expected value range.</p>
+<p>When comparing the three models m3 has all of the weights (~1), which indicates a strong support for the experience factors.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">compare</span>(m1, m2, m3, <span class="at">func =</span> PSIS)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       PSIS       SE    dPSIS      dSE     pPSIS       weight
+m3 20179.36 2278.396   0.0000       NA 234.05348 1.000000e+00
+m2 20328.44 2365.881 149.0837 358.2261 145.37713 4.235266e-33
+m1 20372.72 2361.241 193.3668 420.7575  80.09241 1.025507e-42</code></pre>
+</div>
+</div>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
