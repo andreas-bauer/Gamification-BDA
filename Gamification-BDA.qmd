@@ -25,6 +25,7 @@ suppressPackageStartupMessages(library(dagitty))
 suppressPackageStartupMessages(library(rethinking))
 suppressPackageStartupMessages(library(magrittr))
 suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library("brms"))
 ```
 
 
@@ -127,7 +128,7 @@ withoutGameRaw <- read.csv(file = 'data/non_gamified_sessions.csv', header = TRU
 Cleanup demographic data by replacing string representations of the experience levels with ordered categorical numbers (1,2, and 3).
 The differences between categorical numbers are not equal, e.g., a person with 3 years of experience with testing will not result in 3 times better outcome compared to one with 1 year of experience.
 ```{r}
-demographic <- subset(demographicRaw, select = c(Students.ID, expertise.in.java, expertise.in.sw.testing, expertise.in.web.app.development))
+demographic <- subset(demographicRaw, select = c(Students.ID, expertise.in.java, expertise.in.sw.testing, expertise.in.web.app.development), Group != 0)
 
 names(demographic) <- c("studentId", "expJava", "expTest", "expWeb")
 
@@ -154,17 +155,24 @@ demographic[2:4] <- lapply(demographic[2:4], factor)
 ```
 
 ```{r}
-withGame <- subset(withGameRaw, select = c(Students.ID, X..Interactions.G))
+withGame <- subset(withGameRaw, select = c(Students.ID, X..Interactions.G, Coverage.G, true.positives, Duration.session.G, Total.Page.G), Group != 0)
 
-names(withGame) <- c("studentId", "widgetsInspected")
+names(withGame) <- c("studentId", "widgetsInspected", "coverage", "truePositives", "duration", "pages")
 withGame['gamification'] <- 1
 
-withoutGame <- subset(withoutGameRaw, select = c(Students.ID, X..Interactions))
-names(withoutGame) <- c("studentId", "widgetsInspected")
+withoutGame <- subset(withoutGameRaw, select = c(Students.ID, X..Interactions, Coverage.NG, true.positives, Duration.session.NG, Total.Page.NG), Group != 0)
+names(withoutGame) <- c("studentId", "widgetsInspected", "coverage", "truePositives", "duration", "pages")
 withoutGame['gamification'] <- 0
 
 game_merged <-rbind(withGame, withoutGame)
 game_merged <- merge(game_merged, demographic, by="studentId")
+game_merged <- game_merged %>% mutate(coverage = str_replace(coverage,",",".") %>% 
+                       str_replace("%","") %>% 
+                       as.numeric() %>% 
+                       (function(x) x/100),
+                       duration = str_replace(duration,",",".") %>% 
+                        as.numeric(),
+                       pageDuration = duration / pages)
 ```
 
 ## Estimating model parameters
@@ -319,6 +327,35 @@ When comparing the three models m3 has all of the weights (~1), which indicates 
 compare(m1, m2, m3, func = PSIS)
 ```
 
+## Second attempt (using BRMS)
+
+Two metrics for effectiveness: coverage and true positives.
+
+```{r}
+dag <- dagitty("dag {
+G -> COV
+G -> TP
+}")
+drawdag(dag)
+```
+
+coverage = "widgets interacted" / "total number of widgets"
+
+```{r}
+fit <- brm(formula = coverage ~ gamification + (1 | studentId), data = game_merged)
+```
+
+```{r}
+dag <- dagitty("dag {
+G -> W
+G -> D -> W
+}")
+drawdag(dag)
+```
+```{r}
+fit <- brm(formula = widgetsInspected ~ gamification + pageDuration + (1 | studentId), data = game_merged)
+summary(fit, waic = TRUE)
+```
 ## References
 
 [1] Coppola, R., Fulcini, T., Ardito, L., Torchiano, M. & Alégroth, E., Gamification: the next Silver Bullet for Exploratory GUI Testing? (in revision)
