@@ -22,6 +22,8 @@ Information about BDA and its application is obtained from the Statistical Rethi
 
 To create the model I initially used `ulam` from the `rethinking` package [2] and for the final version switched to BRMS [3].
 
+**Don't trust anything in here! I use this project to learn BDA.**
+
 ## Prerequisites
 
 To install all required dependencies `setup.R` should be executed.
