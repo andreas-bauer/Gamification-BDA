@@ -159,6 +159,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In this project, I perform a (re-)analysis of the impacts of Gamification for exploratory GUI testing using Bayesian Data Analysis (BDA). Input for this analysis is the <a href="https://figshare.com/projects/GamificationReplicationPackage/127202">replication package</a> from the experiment [1].</p>
 <p>Information about BDA and its application is obtained from the Statistical Rethinking book by Richard McElreath [2].</p>
 <p>To create the model I initially used <code>ulam</code> from the <code>rethinking</code> package [2] and for the final version switched to BRMS [3].</p>
+<p><strong>Don’t trust anything in here! I use this project to learn BDA.</strong></p>
 </section>
 <section id="prerequisites" class="level2">
 <h2 class="anchored" data-anchor-id="prerequisites">Prerequisites</h2>
@@ -347,24 +348,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">HPDI</span>(g0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>|0.89 0.89| 
-   41   159 </code></pre>
+   40   159 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">HPDI</span>(g1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>|0.89 0.89| 
-   50   179 </code></pre>
+   46   180 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>diff <span class="ot">&lt;-</span> g0 <span class="sc">-</span> g1</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">HPDI</span>(diff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>|0.89 0.89| 
- -106    75 </code></pre>
+ -108    77 </code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">table</span>(<span class="fu">sign</span>(g0<span class="sc">-</span>g1))</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>t[<span class="dv">1</span>] <span class="sc">/</span> (t[<span class="dv">1</span>] <span class="sc">+</span> t[<span class="dv">3</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       -1 
-0.5834802 </code></pre>
+0.5748111 </code></pre>
 </div>
 </div>
 <p>In ~ 60% of the cases Gamification produces better results (more inspected widgets) compared to ~40% in the non-Gamification cases.</p>
